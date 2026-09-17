@@ -1,0 +1,76 @@
+{{!-- Gerenciador de formas (v0.6). Contexto: { rows, catalog, hasForms } --}}
+<div class="ts-root">
+  <div class="ts-toolbar">
+    <span class="ts-hint">{{localize 'TROVADOR_SHAPESHIFT.config.dropHint'}}</span>
+    <button type="button" class="ts-add" data-action="addForm">
+      <i class="fa-solid fa-plus"></i> {{localize 'TROVADOR_SHAPESHIFT.config.addForm'}}
+    </button>
+  </div>
+
+  <datalist id="ts-effect-catalog">
+    {{#each catalog}}<option value="{{this.key}}">{{this.label}}</option>{{/each}}
+  </datalist>
+
+  <ol class="ts-forms-list">
+    {{#unless hasForms}}
+    <li class="ts-empty">{{localize 'TROVADOR_SHAPESHIFT.config.noForms'}}</li>
+    {{/unless}}
+    {{#each rows}}
+    <li class="ts-form" data-id="{{this.id}}">
+      <div class="ts-form-line">
+        <img class="ts-form-icon" src="{{#if this.img}}{{this.img}}{{else}}icons/svg/mystery-man.svg{{/if}}" width="40" height="40" />
+        <input type="text" class="ts-form-name" name="forms.{{this.id}}.label"
+          value="{{this.label}}" placeholder="{{localize 'TROVADOR_SHAPESHIFT.config.label'}}" />
+        <input type="hidden" name="forms.{{this.id}}.img" value="{{this.img}}" />
+        <button type="button" class="ts-icon-btn" data-action="pickArt" data-id="{{this.id}}"
+          title="{{localize 'TROVADOR_SHAPESHIFT.config.art'}}"><i class="fa-solid fa-image"></i></button>
+        <button type="button" class="ts-icon-btn" data-action="preview" data-id="{{this.id}}"
+          title="{{localize 'TROVADOR_SHAPESHIFT.config.preview'}}"><i class="fa-solid fa-eye"></i></button>
+        <button type="button" class="ts-icon-btn ts-del" data-action="deleteForm" data-id="{{this.id}}"
+          title="{{localize 'TROVADOR_SHAPESHIFT.config.delete'}}"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <div class="ts-form-line ts-form-opts">
+        <label>{{localize 'TROVADOR_SHAPESHIFT.config.size'}}
+          <select name="forms.{{this.id}}.size">
+            {{#each this.sizeChoices}}
+            <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize 'TROVADOR_SHAPESHIFT.config.trigger'}}
+          <select name="forms.{{this.id}}.triggerType" data-trigger-select>
+            <option value="manual" {{#unless this.isEffect}}{{#unless this.isArmor}}selected{{/unless}}{{/unless}}>{{localize 'TROVADOR_SHAPESHIFT.config.manual'}}</option>
+            <option value="effect" {{#if this.isEffect}}selected{{/if}}>{{localize 'TROVADOR_SHAPESHIFT.config.byEffect'}}</option>
+            <option value="armor" {{#if this.isArmor}}selected{{/if}}>{{localize 'TROVADOR_SHAPESHIFT.config.byArmor'}}</option>
+          </select>
+        </label>
+        <label class="ts-effect-slug">
+          {{localize 'TROVADOR_SHAPESHIFT.config.effectSlug'}}
+          <input type="text" name="forms.{{this.id}}.effectSlug" value="{{this.effectSlug}}"
+            list="ts-effect-catalog" placeholder="spell-effect-pest-form" />
+        </label>
+        <label class="ts-armor-slug">
+          {{localize 'TROVADOR_SHAPESHIFT.config.armorSlug'}}
+          <input type="text" name="forms.{{this.id}}.armorSlug" value="{{this.armorSlug}}"
+            placeholder="{{localize 'TROVADOR_SHAPESHIFT.config.armorDrop'}}" />
+        </label>
+        <label class="ts-enabled" title="{{localize 'TROVADOR_SHAPESHIFT.config.enabled'}}">
+          <input type="checkbox" name="forms.{{this.id}}.enabled" {{#if this.enabled}}checked{{/if}} />
+          {{localize 'TROVADOR_SHAPESHIFT.config.enabled'}}
+        </label>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+
+  <footer class="ts-footer">
+    <button type="button" class="ts-icon-btn" data-action="restore"
+      title="{{localize 'TROVADOR_SHAPESHIFT.config.restore'}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+    <button type="submit" class="ts-save">
+      <i class="fa-solid fa-floppy-disk"></i> {{localize 'TROVADOR_SHAPESHIFT.config.save'}}
+    </button>
+    <button type="button" class="ts-save-close" data-action="saveClose">
+      <i class="fa-solid fa-check"></i> {{localize 'TROVADOR_SHAPESHIFT.config.saveClose'}}
+    </button>
+  </footer>
+</div>
